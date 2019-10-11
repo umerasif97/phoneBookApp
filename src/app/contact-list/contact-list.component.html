@@ -1,0 +1,73 @@
+<div class="container mt-4">
+    <div class="row mb-2">
+        <div class="col">
+            <h4>Contacts</h4>
+        </div>
+        <div class="col d-flex justify-content-end">
+            <button class="btn btn-primary" type="button" (click)="openModal(template)">Add Contact</button>
+            <button class="btn btn-secondary ml-1" type="button" (click)="logout()">Logout</button>
+        </div>
+    </div>
+    <div class="table table-responsive">
+        <table class="table table-sm table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Number</th>
+                    <th scope="col">Edit</th>
+                    <th scope="col">Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let contact of contactList; let i = index;">
+                    <th scope="row">{{i+1}}</th>
+                    <td>{{contact.name}}</td>
+                    <td>{{contact.number}}</td>
+                    <td>
+                        <button class="btn btn-secondary" type="button"
+                            (click)="editContact(contact, i);openModal(template)" data-toggle="modal"
+                            data-target="#contactModal">Edit</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-danger" type="button" (click)="deleteContact(i)">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<ng-template #template>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Contact</h5>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" formControlName="name" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && form.name.errors }" />
+                        <div *ngIf="submitted && form.name.errors" class="invalid-feedback">
+                            <div *ngIf="form.name.errors.required">Name is required</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Number</label>
+                        <input type="number" formControlName="number" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && form.number.errors }" />
+                        <div *ngIf="submitted && form.number.errors" class="invalid-feedback">
+                            <div *ngIf="form.number.errors.required">Number is required</div>
+                            <div *ngIf="form.number.errors.minlength">Min 11 numbers</div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <button class="btn btn-primary mr-1">Save</button>
+                        <button class="btn btn-secondary" type="button" (click)="closeModal()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</ng-template>
